@@ -1,0 +1,23 @@
+# Node modules (both frontend and backend)
+frontend/node_modules/
+backend/node_modules/
+
+# Expo/React Native build stuff
+frontend/.expo/
+frontend/.expo-shared/
+frontend/android/
+frontend/ios/
+frontend/build/
+frontend/dist/
+
+# Backend cache/build
+backend/__pycache__/
+backend/build/
+backend/dist/
+
+# Logs, environment, system
+*.env
+*.log
+.vscode/
+.DS_Store
+Thumbs.db
