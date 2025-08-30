@@ -1,28 +1,65 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, SafeAreaView, FlatList, Dimensions } from 'react-native';
 import Button from '../components/Button';
 
+const images = [
+  require('../../assets/images/onboarding.png'),
+  require('../../assets/images/onboarding2.png'),
+  require('../../assets/images/onboarding3.png'),
+];
+
+const { width } = Dimensions.get('window');
+
 const OnboardingScreen = ({ navigation }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const flatListRef = useRef(null);
+
+  // Auto-scroll carousel every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % images.length;
+      setActiveIndex(nextIndex);
+      flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [activeIndex]);
+
+  // Prevent error if user swipes manually
+  const handleMomentumScrollEnd = (event) => {
+    const slide = Math.round(event.nativeEvent.contentOffset.x / width);
+    setActiveIndex(slide);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>MyDermaAI</Text>
+        <Text style={styles.title}>MyDerma Care</Text>
         <Text style={styles.subtitle}>Skin Disease Detection</Text>
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('../../assets/images/onboarding.png')}
-            style={styles.image}
-            resizeMode="contain"
+        <View style={styles.carouselContainer}>
+          <FlatList
+            ref={flatListRef}
+            data={images}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => (
+              <Image source={item} style={styles.image} resizeMode="contain" />
+            )}
+            onMomentumScrollEnd={handleMomentumScrollEnd}
+            snapToInterval={width}
+            decelerationRate="fast"
           />
         </View>
 
         <Text style={styles.description}>
-          Detect skin conditions quickly and accurately using our advanced AI technology
+          This app uses AI to help detect skin conditions. It is not a replacement for medical advice or treatment.
+          Please consult a qualified healthcare professional or dermatologist for accurate evaluation.
         </Text>
 
         <Button
-          title="Get Started"
+          title="I understand. Get Started"
           onPress={() => navigation.navigate('Home')}
           style={styles.button}
         />
@@ -53,14 +90,17 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 40,
   },
-  imageContainer: {
-    width: '100%',
+  carouselContainer: {
+    width: '110%',
     height: 300,
-    marginBottom: 40,
+    marginBottom: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: width * 0.9,
+    height: 260,
+    alignSelf: 'center',
   },
   description: {
     fontSize: 16,

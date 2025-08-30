@@ -20,7 +20,6 @@ const PreviewScreen = ({ route, navigation }) => {
 
   const sendImageForDetection = async (imageUri) => {
     try {
-      // Use the actual Roboflow API for skin disease detection
       const result = await detectSkinDisease(imageUri);
       return result;
     } catch (error) {
@@ -47,7 +46,7 @@ const PreviewScreen = ({ route, navigation }) => {
     setLoading(true);
     try {
       const resultData = await sendImageForDetection(imageUri);
-      
+
       if (resultData.success) {
         navigation.navigate('Result', {
           resultData,
@@ -57,7 +56,6 @@ const PreviewScreen = ({ route, navigation }) => {
         Alert.alert('Detection Failed', 'Unable to analyze the image. Please try again.');
       }
     } catch (error) {
-      console.error('Detection error:', error);
       const errorMessage = getErrorMessage(error);
       Alert.alert('Detection Error', errorMessage, [{ text: 'OK' }]);
     } finally {
@@ -67,18 +65,24 @@ const PreviewScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Keep the Header with back button */}
-      <Header title="Image Preview" navigation={navigation} />
-
+      <Header title="Image Preview" navigation={navigation} showCancelButton={true} />
       <View style={styles.content}>
         {imageUri ? (
-          <Image source={{ uri: imageUri }} style={styles.previewImage} resizeMode="cover" />
+          <>
+            <Text style={styles.imageLabel}>Your Selected Skin Image</Text>
+            <View style={styles.previewWrapper}>
+              <Image source={{ uri: imageUri }} style={styles.previewImage} resizeMode="cover" />
+            </View>
+            <Text style={styles.description}>
+              Ensure the image is clear and well-lit. AI analysis will attempt to identify visible skin conditions.
+            </Text>
+          </>
         ) : (
           <Text>No image selected.</Text>
         )}
       </View>
 
-      <View style={styles.bottomButtonContainer}>
+      <View style={styles.bottomArea}>
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#005a9c" />
@@ -87,11 +91,16 @@ const PreviewScreen = ({ route, navigation }) => {
           </View>
         ) : (
           imageUri && (
-            <Button
-              title="Start Detection"
-              onPress={handleStartDetection}
-              style={styles.nextButton}
-            />
+            <>
+              <Button
+                title="Start Detection"
+                onPress={handleStartDetection}
+                style={styles.detectButton}
+              />
+              <TouchableOpacity onPress={handleCancel} style={styles.retakeButton}>
+                <Text style={styles.retakeText}>Retake Image</Text>
+              </TouchableOpacity>
+            </>
           )
         )}
       </View>
@@ -102,50 +111,47 @@ const PreviewScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  cancelButton: {
-    padding: 8,
-  },
-  cancelText: {
-    color: '#d00',
-    fontSize: 16,
-    fontWeight: 'bold',
+    backgroundColor: '#ffffff',
   },
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 24,
+    paddingTop: 20,
+  },
+  previewWrapper: {
+    borderWidth: 2,
+    borderColor: '#005a9c',
+    borderRadius: 18,
+    overflow: 'hidden',
+    marginTop: 12,
+    backgroundColor: '#f0f8ff',
   },
   previewImage: {
-    width: 300,
-    height: 300,
-    borderRadius: 16,
-    backgroundColor: '#eee',
+    width: 280,
+    height: 280,
   },
-  bottomButtonContainer: {
-    width: '100%',
+  imageLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#005a9c',
+  },
+  description: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#555',
+    marginTop: 14,
+    paddingHorizontal: 8,
+  },
+  bottomArea: {
+    paddingBottom: 40,
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingBottom: 40,
     backgroundColor: '#fff',
   },
-  nextButton: {
-    width: 180,
+  detectButton: {
+    width: 200,
+    marginTop: 10,
   },
   loadingContainer: {
     alignItems: 'center',
@@ -161,6 +167,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 14,
     color: '#666',
+  },
+  retakeButton: {
+    marginTop: 12,
+  },
+  retakeText: {
+    color: '#cc0000',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
 

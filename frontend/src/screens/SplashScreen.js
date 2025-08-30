@@ -11,7 +11,8 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Derma Care.</Text>
+      <Text style={styles.title}>MyDerma Care.</Text>
+      <Text style={styles.subtitle}>Skin Disease Detection</Text>
     </View>
   );
 };
@@ -26,6 +27,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 34,
     fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
     color: '#fff',
     textAlign: 'center',
   },

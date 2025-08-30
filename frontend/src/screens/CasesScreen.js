@@ -1,38 +1,69 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    Image,
+    TouchableOpacity,
+    FlatList
+} from 'react-native';
+import { useCases } from '../context/CasesContext';
 import Header from '../components/Header';
 
-const CaseScreen = () => {
-    // Placeholder for case data
-    const cases = [];
+const CasesScreen = ({ navigation }) => {
+    const { cases } = useCases();
+
+    const handleCasePress = (item) => {
+        // Navigate to ResultScreen with the case details
+        navigation.navigate('Result', {
+            imageUri: item.imageUri,
+            resultData: {
+                result: {
+                    condition: item.condition,
+                    confidence: item.confidence,
+                    advice: item.advice,
+                    detections: item.detections || [],
+                    raw_response: item.raw_response || {},
+                }
+            }
+        });
+    };
+
+    const renderCase = ({ item }) => (
+        <TouchableOpacity onPress={() => handleCasePress(item)} activeOpacity={0.8}>
+            <View style={styles.caseRow}>
+                <Image source={{ uri: item.imageUri }} style={styles.thumbnail} />
+                <View style={styles.caseDetails}>
+                    <Text style={styles.caseTitle} numberOfLines={1}>
+                        {item.condition || 'Unknown Case'}
+                    </Text>
+                    <Text style={styles.caseMeta}>
+                        {item.date || 'Unknown Date'} {item.fileSize ? `- ${item.fileSize}` : ''}
+                    </Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Case History</Text>
-                <Text style={styles.subtitle}>Track previous skin condition checks</Text>
-            </View>
+            <Header title="Cases" titleStyle={{ textAlign: 'center', color: '#005a9c' }} />
 
-            <View style={styles.content}>
-                {cases.length === 0 ? (
-                    <View style={styles.emptyState}>
-                        <Image
-                            source={require('../../assets/images/onboarding.png')} // Replace with your own icon
-                            style={styles.icon}
-                        />
-                        <Text style={styles.emptyText}>No cases added yet</Text>
-                    </View>
-                ) : (
-                    <Text>Cases will show here.</Text> // Replace with mapped case cards
-                )}
-            </View>
+            <FlatList
+                data={cases}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={renderCase}
+                ListEmptyComponent={<Text style={styles.emptyText}>No cases yet.</Text>}
+                contentContainerStyle={styles.listContent}
+            />
 
-            //bottom navigation<View style={styles.tabBar}>
-                <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Home')}>
+            <View style={styles.tabBar}>
+                <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.tabText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Cases')}>
-                    <Text style={styles.tabText}>My Cases</Text>
+                <TouchableOpacity>
+                    <Text style={[styles.tabText, styles.activeTab]}>My Cases</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -42,69 +73,69 @@ const CaseScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#eaf6ff', // lightest blue
+        backgroundColor: '#fdfdfdff', // Matches other pages' background
     },
-    header: {
-        paddingTop: 20,
-        paddingHorizontal: 24,
-        backgroundColor: '#cce4ff', // mid blue
-        paddingBottom: 16,
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
-        elevation: 3,
+    listContent: {
+        padding: 16,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#003366',
-        marginBottom: 4,
+    caseRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 18,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 10,
+        elevation: 2,
     },
-    subtitle: {
-        fontSize: 16,
-        color: '#336699',
+    thumbnail: {
+        width: 56,
+        height: 56,
+        borderRadius: 8,
+        backgroundColor: '#a6bcd2ff',
+        marginRight: 12,
+        borderWidth: 2,
+        borderColor: '#0d609bff',
     },
-    content: {
+    caseDetails: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: 24,
     },
-    emptyState: {
-        alignItems: 'center',
+    caseTitle: {
+        fontSize: 16,
+        color: '#75afd9ff',
+        fontWeight: 'bold',
+        marginBottom: 2,
+        textTransform: 'capitalize',
+        borderColor: '#2b628aff'
     },
-    icon: {
-        width: 100,
-        height: 100,
-        marginBottom: 20,
-        opacity: 0.6,
+    caseMeta: {
+        fontSize: 14,
+        color: '#333',
+        marginTop: 2,
     },
     emptyText: {
-        fontSize: 18,
-        color: '#003366',
-        fontStyle: 'italic',
+        textAlign: 'center',
+        marginTop: 60,
+        fontSize: 16,
+        color: '#888',
     },
-    bottomButtonContainer: {
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-    backgroundColor: '#fff',
-  },
     tabBar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingVertical: 20,
-        backgroundColor: '#cce4ff', // mid blue
-        borderTopWidth: 1,
-        borderColor: '#b0c4de', // light blue
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
+        paddingVertical: 14,
+        borderTopWidth: 0.5,
+        borderColor: '#b0c4de',
+        backgroundColor: '#cce4ff',
     },
     tabText: {
-        fontSize: 16,
         color: '#003366',
+        fontSize: 15,
+    },
+    activeTab: {
+        fontWeight: 'bold',
+        color: '#005a9c',
+        textDecorationLine: 'underline',
     },
 });
 
-export default CaseScreen;
+export default CasesScreen;

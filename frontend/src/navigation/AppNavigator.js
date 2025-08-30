@@ -6,6 +6,7 @@ import PreviewScreen from '../screens/PreviewScreen';
 import ResultScreen from '../screens/ResultScreen';
 import CasesScreen from '../screens/CasesScreen';
 import SplashScreen from '../screens/SplashScreen';
+import HospitalsScreen from '../screens/HospitalsScreen'; // Assuming you have a HospitalsScreen
 
 
 const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Preview" component={PreviewScreen} />
       <Stack.Screen name="Result" component={ResultScreen} />
       <Stack.Screen name="Cases" component={CasesScreen} />
+      <Stack.Screen name="Hospitals" component={HospitalsScreen} />
     </Stack.Navigator>
   );
 };
