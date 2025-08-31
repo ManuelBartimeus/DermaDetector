@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Header from '../components/Header';
 import Button from '../components/Button';
-import { detectSkinDisease } from '../services/roboflowService';
+import { detectSkinDisease } from '../services/skinDetectionService';
 import { validateImageUri, getErrorMessage } from '../utils/helpers';
 
 const PreviewScreen = ({ route, navigation }) => {

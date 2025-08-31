@@ -1,0 +1,158 @@
+{
+  "skin_diseases": [
+    {
+      "name": "Acne",
+      "overview": "Acne is a common skin condition that occurs when hair follicles become plugged with oil and dead skin cells. It often causes whiteheads, blackheads or pimples, and usually appears on the face, forehead, chest, upper back and shoulders.",
+      "symptoms": ["Whiteheads", "Blackheads", "Small red bumps", "Pimples", "Large solid painful lumps", "Cystic lesions"],
+      "causes": ["Excess oil production", "Hair follicles clogged by oil and dead skin cells", "Bacteria", "Hormonal changes"],
+      "treatments": ["Topical retinoids", "Benzoyl peroxide", "Salicylic acid", "Antibiotics", "Hormonal therapy", "Professional extraction"]
+    },
+    {
+      "name": "Actinic Keratosis",
+      "overview": "Actinic keratoses are rough, scaly patches on the skin that develop from years of sun exposure. They're most commonly found on areas exposed to the sun, such as the face, lips, ears, forearms, and hands.",
+      "symptoms": ["Rough, dry or scaly patch of skin", "Flat to slightly raised patch", "Hard, wart-like surface", "Color varies from pink to red to brown"],
+      "causes": ["Long-term sun exposure", "UV radiation damage", "Fair skin", "Age over 40"],
+      "treatments": ["Cryotherapy", "Topical medications", "Chemical peels", "Photodynamic therapy", "Laser therapy"]
+    },
+    {
+      "name": "Benign Tumors",
+      "overview": "Benign skin tumors are non-cancerous growths on the skin. They can appear as moles, skin tags, lipomas, or other types of growths that don't spread to other parts of the body.",
+      "symptoms": ["Painless lumps or bumps", "Slow-growing masses", "Well-defined borders", "No ulceration"],
+      "causes": ["Genetic factors", "Age", "Sun exposure", "Hormonal changes"],
+      "treatments": ["Observation", "Surgical removal", "Cryotherapy", "Laser removal", "Electrosurgery"]
+    },
+    {
+      "name": "Bullous",
+      "overview": "Bullous diseases are characterized by the formation of blisters (bullae) on the skin and mucous membranes. These can be caused by autoimmune conditions, infections, or other factors.",
+      "symptoms": ["Large fluid-filled blisters", "Skin fragility", "Erosions when blisters rupture", "Itching or burning sensation"],
+      "causes": ["Autoimmune disorders", "Genetic factors", "Medications", "Infections"],
+      "treatments": ["Corticosteroids", "Immunosuppressive drugs", "Wound care", "Antibiotics for secondary infections"]
+    },
+    {
+      "name": "Candidiasis",
+      "overview": "Candidiasis is a fungal infection caused by Candida yeast. It commonly affects warm, moist areas of the body such as the mouth, throat, esophagus, and genital area.",
+      "symptoms": ["Red, inflamed skin", "Itching", "White patches", "Burning sensation", "Cottage cheese-like discharge"],
+      "causes": ["Candida albicans fungus", "Weakened immune system", "Antibiotics use", "Diabetes", "Pregnancy"],
+      "treatments": ["Antifungal medications", "Topical antifungal creams", "Oral antifungal drugs", "Lifestyle changes"]
+    },
+    {
+      "name": "Drug Eruption",
+      "overview": "Drug eruptions are adverse skin reactions caused by medications. They can range from mild rashes to severe, life-threatening conditions like Stevens-Johnson syndrome.",
+      "symptoms": ["Skin rash", "Itching", "Redness", "Blistering", "Fever", "Swelling"],
+      "causes": ["Allergic reactions to medications", "Toxic reactions", "Photosensitivity", "Drug interactions"],
+      "treatments": ["Discontinue offending drug", "Topical corticosteroids", "Antihistamines", "Supportive care"]
+    },
+    {
+      "name": "Eczema",
+      "overview": "Eczema, also known as atopic dermatitis, is a condition that makes skin red and itchy. It's common in children but can occur at any age. It's a chronic condition that tends to flare periodically.",
+      "symptoms": ["Dry skin", "Itching", "Red to brownish-gray patches", "Small raised bumps", "Thickened cracked skin", "Raw sensitive skin"],
+      "causes": ["Genetic factors", "Environmental triggers", "Immune system dysfunction", "Skin barrier defects"],
+      "treatments": ["Moisturizers", "Topical corticosteroids", "Calcineurin inhibitors", "Antihistamines", "Avoiding triggers"]
+    },
+    {
+      "name": "Infestations and Bites",
+      "overview": "Skin infestations and bites can be caused by various parasites, insects, or arthropods. Common examples include scabies, lice, bed bugs, and mosquito bites.",
+      "symptoms": ["Itching", "Red bumps or welts", "Burrows in the skin", "Secondary bacterial infection", "Rash"],
+      "causes": ["Parasites", "Insect bites", "Poor hygiene", "Close contact with infected individuals"],
+      "treatments": ["Topical or oral antiparasitic medications", "Antihistamines", "Topical corticosteroids", "Antibiotics for secondary infections"]
+    },
+    {
+      "name": "Lichen",
+      "overview": "Lichen planus is an inflammatory condition that can affect the skin, hair, nails, and mucous membranes. It appears as purplish, itchy, flat-topped bumps on the skin.",
+      "symptoms": ["Purple flat-topped bumps", "Itching", "Lacy white patches in mouth", "Nail ridging or loss", "Hair loss"],
+      "causes": ["Autoimmune response", "Viral infections", "Allergens", "Medications", "Stress"],
+      "treatments": ["Topical corticosteroids", "Oral corticosteroids", "Antihistamines", "Retinoids", "Immunosuppressants"]
+    },
+    {
+      "name": "Lupus",
+      "overview": "Lupus is an autoimmune disease where the body's immune system attacks its own tissues and organs. Skin manifestations are common and can include butterfly rash, discoid lesions, and photosensitivity.",
+      "symptoms": ["Butterfly-shaped facial rash", "Discoid rashes", "Photosensitivity", "Mouth ulcers", "Hair loss"],
+      "causes": ["Autoimmune disorder", "Genetic factors", "Environmental triggers", "Infections", "Stress"],
+      "treatments": ["Antimalarial drugs", "Corticosteroids", "Immunosuppressants", "Biologics", "Sun protection"]
+    },
+    {
+      "name": "Moles",
+      "overview": "Moles are common skin growths made up of cells that produce pigment (melanocytes). Most moles are harmless, but some can develop into melanoma, a type of skin cancer.",
+      "symptoms": ["Dark spots on skin", "Raised or flat", "Round or oval shape", "Uniform color", "Less than 6mm in diameter"],
+      "causes": ["Genetic factors", "Sun exposure", "Hormonal changes", "Age"],
+      "treatments": ["Regular monitoring", "Surgical removal if suspicious", "Laser removal for cosmetic reasons", "Biopsy if changes occur"]
+    },
+    {
+      "name": "Psoriasis",
+      "overview": "Psoriasis is a chronic autoimmune condition that causes rapid skin cell production, resulting in thick, silvery scales and itchy, dry, red patches that are sometimes painful.",
+      "symptoms": ["Red patches with silvery scales", "Dry cracked skin", "Itching or burning", "Thickened nails", "Swollen joints"],
+      "causes": ["Autoimmune disorder", "Genetic factors", "Environmental triggers", "Stress", "Infections"],
+      "treatments": ["Topical treatments", "Light therapy", "Oral medications", "Biologics", "Lifestyle modifications"]
+    },
+    {
+      "name": "Rosacea",
+      "overview": "Rosacea is a common skin condition that causes redness and visible blood vessels in the face. It may also produce small, red, pus-filled bumps.",
+      "symptoms": ["Facial redness", "Swollen red bumps", "Eye problems", "Enlarged nose", "Visible blood vessels"],
+      "causes": ["Unknown exact cause", "Genetic factors", "Environmental triggers", "Demodex mites", "H. pylori bacteria"],
+      "treatments": ["Topical medications", "Oral antibiotics", "Laser therapy", "Avoiding triggers", "Sun protection"]
+    },
+    {
+      "name": "Seborrheic Keratoses",
+      "overview": "Seborrheic keratoses are noncancerous skin growths that appear as waxy, scaly, slightly raised patches. They're very common in people over 50 and can appear anywhere on the body.",
+      "symptoms": ["Waxy, scaly patches", "Stuck-on appearance", "Brown, black, or tan color", "Round or oval shape", "Slightly raised"],
+      "causes": ["Age", "Genetic factors", "Sun exposure", "Hormonal changes"],
+      "treatments": ["No treatment needed", "Cryotherapy", "Electrodesiccation", "Shave excision", "Laser removal"]
+    },
+    {
+      "name": "Skin Cancer",
+      "overview": "Skin cancer is the abnormal growth of skin cells, most often on skin exposed to the sun. The three main types are basal cell carcinoma, squamous cell carcinoma, and melanoma.",
+      "symptoms": ["New growths", "Changes in existing moles", "Sores that don't heal", "Irregular borders", "Color changes"],
+      "causes": ["UV radiation", "Fair skin", "History of sunburns", "Genetic factors", "Weakened immune system"],
+      "treatments": ["Surgical excision", "Mohs surgery", "Radiation therapy", "Chemotherapy", "Immunotherapy"]
+    },
+    {
+      "name": "Sun/Sunlight Damage",
+      "overview": "Sun damage refers to skin damage caused by ultraviolet (UV) radiation from the sun. This can include sunburn, premature aging, and increased risk of skin cancer.",
+      "symptoms": ["Sunburn", "Premature wrinkles", "Age spots", "Freckles", "Leathery skin texture", "Broken blood vessels"],
+      "causes": ["UV radiation", "Prolonged sun exposure", "Fair skin", "High altitude", "Reflective surfaces"],
+      "treatments": ["Sun protection", "Topical retinoids", "Chemical peels", "Laser therapy", "Antioxidant creams"]
+    },
+    {
+      "name": "Tinea",
+      "overview": "Tinea is a fungal infection of the skin, also known as ringworm. It can affect various parts of the body including the scalp, body, feet (athlete's foot), and groin (jock itch).",
+      "symptoms": ["Ring-shaped rash", "Scaly patches", "Itching", "Hair loss", "Cracked skin", "Blisters"],
+      "causes": ["Dermatophyte fungi", "Direct contact", "Contaminated objects", "Warm moist environments", "Weakened immunity"],
+      "treatments": ["Topical antifungal medications", "Oral antifungal drugs", "Keeping area dry", "Good hygiene", "Avoiding sharing personal items"]
+    },
+    {
+      "name": "Unknown/Normal",
+      "overview": "This category represents either normal skin or skin conditions that cannot be clearly identified or classified into specific disease categories.",
+      "symptoms": ["May appear normal", "Unclear or atypical presentation", "Non-specific changes"],
+      "causes": ["Various or unknown", "Normal skin variation", "Early stage conditions"],
+      "treatments": ["Observation", "Consultation with dermatologist", "Regular monitoring", "Symptomatic treatment"]
+    },
+    {
+      "name": "Vascular Tumors",
+      "overview": "Vascular tumors are growths composed of blood vessels. They can be benign (like hemangiomas) or malignant. Most are present at birth or appear in early childhood.",
+      "symptoms": ["Red or purple growths", "Raised or flat lesions", "May blanch with pressure", "Can grow rapidly", "Usually painless"],
+      "causes": ["Abnormal blood vessel development", "Genetic factors", "Hormonal influences", "Unknown in many cases"],
+      "treatments": ["Observation", "Laser therapy", "Corticosteroids", "Beta-blockers", "Surgical removal"]
+    },
+    {
+      "name": "Vasculitis",
+      "overview": "Vasculitis is inflammation of blood vessels that can affect vessels of any size. When it affects the skin, it can cause various rashes, ulcers, and other skin changes.",
+      "symptoms": ["Purple spots", "Red rash", "Ulcers", "Nodules", "Livedo reticularis", "Skin necrosis"],
+      "causes": ["Autoimmune disorders", "Infections", "Medications", "Systemic diseases", "Unknown causes"],
+      "treatments": ["Corticosteroids", "Immunosuppressive drugs", "Treating underlying causes", "Wound care", "Antibiotics for infections"]
+    },
+    {
+      "name": "Vitiligo",
+      "overview": "Vitiligo is a condition in which patches of skin lose their pigmentation due to the destruction of melanocytes (pigment-producing cells). It can affect any part of the body.",
+      "symptoms": ["White patches on skin", "Premature graying of hair", "Loss of color in mouth", "Changes in eye color", "Symmetrical distribution"],
+      "causes": ["Autoimmune destruction of melanocytes", "Genetic factors", "Environmental triggers", "Stress", "Chemical exposure"],
+      "treatments": ["Topical corticosteroids", "Calcineurin inhibitors", "Light therapy", "Depigmentation", "Cosmetic camouflage"]
+    },
+    {
+      "name": "Warts",
+      "overview": "Warts are small, fleshy bumps on the skin caused by human papillomavirus (HPV). They can appear anywhere on the body and are contagious through direct contact.",
+      "symptoms": ["Small, fleshy bumps", "Rough surface", "Black dots in center", "Pain when pressure applied", "May spread"],
+      "causes": ["Human papillomavirus (HPV)", "Direct contact", "Breaks in skin", "Weakened immune system", "Warm moist environments"],
+      "treatments": ["Salicylic acid", "Cryotherapy", "Laser therapy", "Immunotherapy", "Surgical removal"]
+    }
+  ]
+}

@@ -1,20 +1,20 @@
 {
-  "name": "backend",
+  "name": "ai-derma-detector-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AI Derma Detector Backend - Python FastAPI with ONNX Model",
+  "main": "main.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "echo 'Use Python to start: python main.py' && exit 1",
+    "dev": "echo 'Use Python for development: uvicorn main:app --reload' && exit 1",
+    "install": "echo 'Use pip to install: pip install -r requirements.txt' && exit 1",
+    "python-start": "python main.py",
+    "python-dev": "uvicorn main:app --reload --host 0.0.0.0 --port 3000"
   },
-  "keywords": [],
+  "keywords": ["skin-disease", "detection", "ai", "onnx", "fastapi", "python"],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "multer": "^2.0.2",
-    "openai": "^5.11.0"
-  }
+  "engines": {
+    "python": ">=3.8"
+  },
+  "note": "This backend now uses Python/FastAPI instead of Node.js. Use 'pip install -r requirements.txt' to install dependencies and 'python main.py' to start the server."
 }
