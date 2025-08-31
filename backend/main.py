@@ -8,7 +8,8 @@ import os
 import uvicorn
 import time
 from skin_detection_model import skindisease_detector
-from schemas import APIOutput, DetectionResponse
+from schemas import APIOutput, DetectionResponse, DetailedAnalysis
+from openai_service import openai_service
 
 # Create FastAPI app
 app = FastAPI(title="AI Derma Detector", description="Skin Disease Detection API using ONNX Model", version="1.0.0")
@@ -81,6 +82,20 @@ async def analyze_skin_image(image: UploadFile = File(..., description="Skin ima
         try:
             detection_result = skindisease_detector(img_array)
             
+            # Generate detailed analysis using OpenAI
+            condition = detection_result.get('disease', '')
+            confidence = detection_result.get('probability', 0.0)
+            basic_advice = ', '.join(detection_result.get('treatments', []))
+            
+            print(f"🤖 Generating detailed analysis for {condition} with OpenAI...")
+            detailed_analysis_dict = openai_service.generate_detailed_analysis(condition, confidence, basic_advice)
+            
+            # Convert to Pydantic model
+            detailed_analysis = DetailedAnalysis(**detailed_analysis_dict)
+            
+            # Add detailed analysis to the result
+            detection_result['detailed_analysis'] = detailed_analysis
+            
             # Format the response
             api_output = APIOutput(**detection_result)
             
@@ -97,6 +112,29 @@ async def analyze_skin_image(image: UploadFile = File(..., description="Skin ima
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@app.get("/test-openai")
+async def test_openai():
+    """Test OpenAI integration endpoint"""
+    try:
+        # Test with sample data
+        test_condition = "acne"
+        test_confidence = 0.85
+        test_advice = "Use gentle cleanser twice daily"
+        
+        result = openai_service.generate_detailed_analysis(test_condition, test_confidence, test_advice)
+        
+        return {
+            "success": True,
+            "message": "OpenAI integration test successful",
+            "sample_analysis": result
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": "OpenAI integration test failed"
+        }
 
 @app.get("/health")
 async def health_check():

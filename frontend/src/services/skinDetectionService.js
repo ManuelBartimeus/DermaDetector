@@ -242,6 +242,11 @@ const processBackendResponse = (apiResponse) => {
         condition: result.disease,
         confidence: `${confidencePercentage}%`,
         
+        // Raw backend data for detailed analysis
+        disease: result.disease,
+        probability: result.probability,
+        detailed_analysis: result.detailed_analysis,
+        
         // Medical information
         overview: result.overview,
         symptoms: result.symptoms || [],

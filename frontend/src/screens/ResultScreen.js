@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -8,19 +8,24 @@ import {
     TouchableOpacity,
     SafeAreaView,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import Header from '../components/Header';
 import { getSeverityColor, formatConfidence } from '../utils/helpers';
 import { useCases } from '../context/CasesContext';
+import detailedAnalysisService from '../services/detailedAnalysisService';
 
 const ResultScreen = ({ route, navigation }) => {
     const { imageUri, resultData } = route.params;
 
-    // Extract results from the Roboflow API response
+    // Extract results from the API response
     const { result } = resultData;
-    const { condition, confidence, advice, detections = [], raw_response } = result;
+    const { disease, probability, detailed_analysis } = result;
 
     const [activeSection, setActiveSection] = useState('Overview');
+    const [sectionContent, setSectionContent] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [analysisError, setAnalysisError] = useState(null);
 
     const sections = [
         'Overview',
@@ -30,82 +35,30 @@ const ResultScreen = ({ route, navigation }) => {
         'Next Steps',
     ];
 
-    // Generate dynamic content based on API results
-    const getConditionInfo = (conditionName) => {
-        const conditionLower = conditionName.toLowerCase();
-        const conditionData = {
-            'acne': {
-                overview: 'Acne is a common skin condition that occurs when hair follicles become clogged with oil and dead skin cells. It commonly appears on the face, chest, and back.',
-                urgency: 'Generally not urgent unless severe or causing scarring. Mild to moderate acne can often be managed with over-the-counter treatments.',
-                care: 'Wash affected areas gently twice daily with a mild cleanser. Avoid picking or squeezing lesions.'
-            },
-            'eczema': {
-                overview: 'Eczema (atopic dermatitis) is a chronic inflammatory skin condition that causes dry, itchy, and inflamed skin.',
-                urgency: 'Usually not urgent, but see a doctor if symptoms are severe or interfering with daily activities.',
-                care: 'Keep skin moisturized, avoid known triggers, use gentle fragrance-free products.'
-            },
-            'psoriasis': {
-                overview: 'Psoriasis is a chronic autoimmune condition that causes rapid skin cell buildup, resulting in scaling and inflammation.',
-                urgency: 'Chronic condition requiring medical management. See a dermatologist for proper treatment plan.',
-                care: 'Follow prescribed treatments, avoid triggers, maintain good skin care routine.'
-            },
-            'melanoma': {
-                overview: 'Melanoma is a serious form of skin cancer that develops in melanocytes (pigment-producing cells).',
-                urgency: 'URGENT: Requires immediate medical attention. Please see a dermatologist or healthcare provider as soon as possible.',
-                care: 'Do not delay medical consultation. Protect the area from further sun exposure.'
-            },
-            'rosacea': {
-                overview: 'Rosacea is a chronic inflammatory skin condition that primarily affects the face, causing redness and visible blood vessels.',
-                urgency: 'Not urgent but benefits from medical treatment to prevent progression.',
-                care: 'Avoid known triggers (spicy foods, alcohol, sun exposure), use gentle skincare products.'
+    // Load detailed analysis on component mount
+    useEffect(() => {
+        loadDetailedAnalysis();
+    }, []);
+
+    const loadDetailedAnalysis = async () => {
+        try {
+            setIsLoading(true);
+            const analysis = await detailedAnalysisService.getDetailedAnalysis(imageUri, resultData);
+            
+            if (analysis.success) {
+                setSectionContent(analysis.detailedSections);
+            } else {
+                setAnalysisError(analysis.error);
+                // Use fallback content
+                setSectionContent(detailedAnalysisService.getFallbackSections());
             }
-        };
-
-        // Default information for unknown conditions
-        const defaultInfo = {
-            overview: `Preliminary AI analysis suggests the skin condition is likely: ${conditionName}. This evaluation is based on visual patterns and should not be treated as a confirmed medical diagnosis. For your safety and well-being, always consult a licensed healthcare professional for accurate identification and treatment.`,
-
-            urgency: `It is recommended that you seek medical attention to confirm the diagnosis and receive personalized treatment. Early consultation can help prevent worsening or complications, especially if symptoms persist or spread.`,
-
-            care: `In the meantime, maintain gentle skin care by keeping the area clean and dry. Avoid scratching, applying unverified creams, or using harsh soaps. Monitor for changes in size, color, or irritation, and document them if possible to assist a healthcare provider.`
-
-        };
-
-        return conditionData[conditionLower] || defaultInfo;
-    };
-
-    const conditionInfo = getConditionInfo(condition);
-
-    const sectionContent = {
-        'Overview': conditionInfo.overview,
-
-        'Detection Details': `
-Detected Condition: ${condition}
-Confidence Level: ${confidence}
-
-${detections.length > 0 ? `
-Additional Detections:
-${detections.slice(0, 3).map((detection, index) =>
-            `${index + 1}. ${detection.class} (${Math.round(detection.confidence * 100)}%)`
-        ).join('\n')}
-` : ''}
-
-Note: This is an AI-powered analysis and should not replace professional medical diagnosis.`,
-
-        'Recommendations': advice,
-
-        'Important Notes': `
-• This analysis is provided by AI technology and is for informational purposes only
-• Results should not be used as a substitute for professional medical advice
-• If you have concerns about your skin, please consult a healthcare provider
-• The confidence level indicates the AI's certainty, not the severity of any condition`,
-
-        'Next Steps': `
-1. Save or screenshot these results for your records
-2. ${conditionInfo.urgency}
-3. Monitor the affected area for any changes
-4. ${conditionInfo.care}
-5. Consider taking additional photos to track changes over time`
+        } catch (error) {
+            console.error('Error loading detailed analysis:', error);
+            setAnalysisError(error.message);
+            setSectionContent(detailedAnalysisService.getFallbackSections());
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const { addCase } = useCases();
@@ -117,9 +70,9 @@ Note: This is an AI-powered analysis and should not replace professional medical
     // Modified handleDone to show popup before navigating
     const handleDone = () => {
         addCase({
-            condition,
-            confidence,
-            advice,
+            condition: disease,
+            confidence: probability,
+            advice: result.treatments?.join(', ') || 'Consult healthcare professional',
             date: new Date().toLocaleString(),
             imageUri,
         });
@@ -134,7 +87,7 @@ Note: This is an AI-powered analysis and should not replace professional medical
                 },
                 {
                     text: "Yes",
-                    onPress: () => navigation.navigate('Hospitals', { condition })
+                    onPress: () => navigation.navigate('Hospitals', { condition: disease })
                 }
             ]
         );
@@ -151,12 +104,12 @@ Note: This is an AI-powered analysis and should not replace professional medical
 
                 {/* Disease Name & Confidence */}
                 <View style={styles.resultHeader}>
-                    <Text style={[styles.condition, { color: getSeverityColor(condition) }]}>
-                        {condition}
+                    <Text style={[styles.condition, { color: getSeverityColor(disease) }]}>
+                        {disease}
                     </Text>
                     <View style={styles.confidenceBox}>
                         <Text style={styles.confidenceLabel}>Confidence Level</Text>
-                        <Text style={styles.confidenceValue}>{formatConfidence(confidence)}</Text>
+                        <Text style={styles.confidenceValue}>{formatConfidence(probability)}</Text>
                     </View>
                 </View>
 
@@ -193,7 +146,23 @@ Note: This is an AI-powered analysis and should not replace professional medical
                 {/* Active Content */}
                 <View style={styles.contentBox}>
                     <Text style={styles.sectionTitle}>{activeSection}</Text>
-                    <Text style={styles.sectionContent}>{sectionContent[activeSection]}</Text>
+                    {isLoading ? (
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator size="large" color="#005a9c" />
+                            <Text style={styles.loadingText}>Generating detailed analysis...</Text>
+                        </View>
+                    ) : analysisError ? (
+                        <View style={styles.errorContainer}>
+                            <Text style={styles.errorText}>⚠️ Unable to load detailed analysis</Text>
+                            <Text style={styles.sectionContent}>
+                                {sectionContent[activeSection] || 'Content not available'}
+                            </Text>
+                        </View>
+                    ) : (
+                        <Text style={styles.sectionContent}>
+                            {sectionContent[activeSection] || 'Content not available'}
+                        </Text>
+                    )}
                 </View>
 
                 {/* New Analysis Button */}
@@ -368,6 +337,25 @@ const styles = StyleSheet.create({
     tabText: {
         fontSize: 16,
         color: '#003366',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 14,
+        color: '#005a9c',
+        fontStyle: 'italic',
+    },
+    errorContainer: {
+        paddingVertical: 10,
+    },
+    errorText: {
+        fontSize: 14,
+        color: '#d32f2f',
+        marginBottom: 8,
+        fontWeight: 'bold',
     },
 });
 
