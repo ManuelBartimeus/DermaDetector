@@ -9,15 +9,33 @@ load_dotenv()
 
 class OpenAIService:
     def __init__(self):
-        # Load API key from environment variable, fallback to hardcoded if not found
-        self.api_key = os.getenv('OPENAI_API_KEY', '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')
+        # Load API key from environment variable - no fallback for security
+        self.api_key = os.getenv('OPENAI_API_KEY')
         self.base_url = os.getenv('OPENAI_BASE_URL', 'https://openrouter.ai/api/v1')
         self.model = os.getenv('OPENAI_MODEL', 'gpt-3.5-turbo')
+        
+        # Validate that API key is configured
+        if not self.api_key:
+            print("WARNING: OPENAI_API_KEY environment variable is not set!")
+            print("Please set the OPENAI_API_KEY in your .env file or environment variables.")
+            
+        # Don't log the API key, even partially for security
+        print(f"OpenAI Service initialized with model: {self.model}")
+        print(f"OpenAI Base URL: {self.base_url}")
+        
+    def _is_configured(self) -> bool:
+        """Check if the OpenAI service is properly configured"""
+        return bool(self.api_key and self.api_key.strip())
         
     def generate_detailed_analysis(self, condition: str, confidence: float, basic_advice: str) -> Dict[str, str]:
         """
         Generate detailed analysis sections for the results screen
         """
+        # Check if OpenAI is properly configured
+        if not self._is_configured():
+            print("OpenAI API key not configured, returning fallback response")
+            return self._get_fallback_response(condition, basic_advice, confidence)
+            
         try:
             prompt = f"""
 You are a medical AI assistant providing detailed educational information about skin conditions. 
@@ -81,11 +99,19 @@ Format your response as a JSON object with keys: overview, detection_details, re
                     # If JSON parsing fails, create structured response from text
                     return self._parse_text_response(content, condition, basic_advice, confidence)
             else:
-                print(f"OpenAI API error: {response.status_code} - {response.text}")
+                print(f"OpenAI API error: {response.status_code}")
+                # Don't log the full response as it might contain sensitive info
                 return self._get_fallback_response(condition, basic_advice, confidence)
                 
+        except requests.exceptions.Timeout:
+            print("OpenAI API request timed out")
+            return self._get_fallback_response(condition, basic_advice, confidence)
+        except requests.exceptions.ConnectionError:
+            print("Failed to connect to OpenAI API")
+            return self._get_fallback_response(condition, basic_advice, confidence)
         except Exception as e:
-            print(f"Error generating detailed analysis: {str(e)}")
+            print(f"Error generating detailed analysis: {type(e).__name__}")
+            # Don't log the full error message as it might contain sensitive info
             return self._get_fallback_response(condition, basic_advice, confidence)
     
     def _parse_text_response(self, content: str, condition: str, basic_advice: str, confidence: float) -> Dict[str, str]:

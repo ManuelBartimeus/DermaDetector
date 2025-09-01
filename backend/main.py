@@ -7,12 +7,34 @@ import numpy as np
 import os
 import uvicorn
 import time
+from dotenv import load_dotenv
 from skin_detection_model import skindisease_detector
 from schemas import APIOutput, DetectionResponse, DetailedAnalysis
 from openai_service import openai_service
 
+# Load environment variables
+load_dotenv()
+
+# Startup validation
+def validate_startup_config():
+    """Validate critical configuration on startup"""
+    api_key = os.getenv('OPENAI_API_KEY')
+    if not api_key:
+        print("⚠️  WARNING: OPENAI_API_KEY not configured. OpenAI features will use fallback responses.")
+    elif api_key == "your-openai-api-key-here":
+        print("⚠️  WARNING: OPENAI_API_KEY is set to example value. Please update your .env file.")
+    else:
+        print("✅ OpenAI configuration loaded successfully")
+
+# Run startup validation
+validate_startup_config()
+
 # Create FastAPI app
-app = FastAPI(title="AI Derma Detector", description="Skin Disease Detection API using ONNX Model", version="1.0.0")
+app = FastAPI(
+    title="AI Derma Detector", 
+    description="Secure Skin Disease Detection API using ONNX Model and OpenAI", 
+    version="1.0.0"
+)
 
 # Add request logging middleware
 @app.middleware("http")
